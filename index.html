@@ -448,10 +448,14 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
             z-index: 10000;
+        }
+
+        .modal.show {
+            display: flex;
             animation: fadeIn 0.3s ease;
         }
 
@@ -528,7 +532,7 @@
             border-radius: 25px;
             cursor: pointer;
             font-size: 16px;
-            margin: 20px 0;
+            margin: 10px 0;
             transition: transform 0.3s ease;
         }
 
@@ -542,22 +546,22 @@
             transform: none;
         }
 
-        .error-message {
-            background: #ffebee;
-            color: #c62828;
+        .error-message, .success-message {
             padding: 10px;
             border-radius: 8px;
             margin: 10px 0;
             font-size: 14px;
+            display: none;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
         }
 
         .success-message {
             background: #e8f5e8;
             color: #2e7d32;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 10px 0;
-            font-size: 14px;
         }
 
         @keyframes fadeInUp {
@@ -631,6 +635,7 @@
                 <li><a href="#chatbot" class="chat-nav-button">💬 Ask AI Helper</a></li>
             </ul>
             <div id="userStatus" class="user-status">
+                <span id="userEmail" style="display: none;"></span>
                 <button id="authButton" class="login-button">Sign In</button>
             </div>
         </nav>
@@ -655,7 +660,7 @@
             <div class="chatbot-placeholder">
                 <div class="chatbot-icon">🛠️</div>
                 <h3>AI Assistant Integration Area</h3>
-                <p><strong>Ready to connect with ChatGPT!</strong></p>
+                <p><strong>Ready to connect with AI!</strong></p>
                 <p id="chatbotStatus">🔐 Please sign in to start chatting with our AI assistant</p>
                 <div style="text-align: left; max-width: 600px; margin: 1rem auto; background: rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 10px;">
                     <p>💧 "My toilet won't stop running"</p>
@@ -664,7 +669,7 @@
                     <p>🧽 "How do I remove this stain?"</p>
                     <p>🔧 "My kitchen sink is clogged"</p>
                 </div>
-                <button id="testChatButton" class="form-button" style="max-width: 300px; margin: 20px auto; display: none;">
+                <button id="testChatButton" class="form-button" style="max-width: 300px; margin: 20px auto; display: block;">
                     🧪 Test Database Connection
                 </button>
             </div>
@@ -843,9 +848,14 @@
     <!-- Floating Chat Button -->
     <button class="floating-chat-button" onclick="openChatbot()" title="Get Help Now!"></button>
 
-    <script>
-        console.log('🚀 QuickFixU Starting...');
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeAuthModal()">&times;</button>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('signin')">Sign In</button>
+                <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+            </div>
 
-        // 🔧 SUPABASE CONFIGURATION
-        const SUPABASE_URL = 'https://ceanatdeztoouocesymwf.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlYW5hdGRlenRvdW9jZXN5bXdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxODk4NjQsImV4cCI6MjA2ODc2
+            <div id="errorMessage" class
