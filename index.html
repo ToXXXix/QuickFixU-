@@ -877,6 +877,44 @@
   </div>
 
 <script>
+
+async function simpleTest() {
+    console.log('🧪 Starting simple test...');
+    
+    try {
+        // Test 1: Check if Supabase is loaded
+        if (typeof window.supabase === 'undefined') {
+            alert('❌ Supabase library not loaded');
+            return;
+        }
+        
+        console.log('✅ Supabase library loaded');
+        
+        // Test 2: Try to create client
+        const testClient = window.supabase.createClient(
+            'https://ceanatdeztoouocesymwf.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlYW5hdGRlenRvdW9jZXN5bXdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxODk4NjQsImV4cCI6MjA2ODc2NTg2NH0.M8VZnXMTD9ykdtCzHCq-5BWiWRaHlHLz1I7Hk2Iccrw'
+        );
+        
+        console.log('✅ Supabase client created');
+        
+        // Test 3: Try simple auth call
+        const { data, error } = await testClient.auth.getSession();
+        
+        console.log('📊 Session test result:', { data, error });
+        
+        if (error) {
+            alert('❌ Auth error: ' + error.message);
+        } else {
+            alert('✅ Connection successful!');
+        }
+        
+    } catch (err) {
+        console.error('💥 Test failed:', err);
+        alert('💥 Test failed: ' + err.message);
+    }
+}
+
 console.log('🚀 QuickFixU Starting...');
 
 // 🔧 SUPABASE CONFIGURATION
