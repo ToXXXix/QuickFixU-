@@ -988,7 +988,10 @@ function updateUserInterface(user) {
     if (user) {
         // User is signed in
         currentUser = user;
-        authButton.textContent = 'Sign Out';
+        
+        // Show first 5 letters of email instead of "Sign Out"
+        const emailPrefix = user.email.substring(0, 5);
+        authButton.textContent = emailPrefix + '...';
         authButton.className = 'logout-button';
         authButton.onclick = handleSignOut;
         
@@ -1041,6 +1044,15 @@ async function handleAuth(event) {
         } else {
             const data = await signUp(email, password);
             showSuccess('Account created successfully!');
+            
+            // Update UI immediately after successful signup
+            if (data.user) {
+                currentUser = data.user;
+                updateUserInterface(data.user);
+                setTimeout(() => {
+                    closeAuthModal();
+                }, 2000);
+            }
         }
         
     } catch (error) {
@@ -1051,6 +1063,7 @@ async function handleAuth(event) {
         submitBtn.textContent = currentTab === 'signin' ? 'Sign In' : 'Sign Up';
     }
 }
+
 
 async function handleSignOut() {
     try {
