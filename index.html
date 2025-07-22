@@ -877,9 +877,9 @@
 <script>
 console.log('🚀 QuickFixU Starting...');
 
-// 🔧 SUPABASE CONFIGURATION - REPLACE WITH YOUR ACTUAL VALUES
+// 🔧 SUPABASE CONFIGURATION
 const SUPABASE_URL = 'https://ceanatdeztoouocesymwf.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlYW5hdGRlenRvdW9jZXN5bXdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxODk4NjQsImV4cCI6MjA2ODc2NTg2NH0.M8VZnXMTD9ykdtCzHCq-5BWiWRaHlHLz1I7Hk2Iccrw'; // You need to get the complete key from Supabase
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlYW5hdGRlenRvdW9jZXN5bXdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxODk4NjQsImV4cCI6MjA2ODc2NTg2NH0.M8VZnXMTD9ykdtCzHCq-5BWiWRaHlHLz1I7Hk2Iccrw';
 
 // Initialize Supabase
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -1040,7 +1040,7 @@ async function handleAuth(event) {
             }, 1500);
         } else {
             const data = await signUp(email, password);
-            showSuccess('Account created! Check your email for verification.');
+            showSuccess('Account created successfully!');
         }
         
     } catch (error) {
@@ -1077,7 +1077,6 @@ function testDatabaseConnection() {
 // 📱 UTILITY FUNCTIONS
 function selectCategory(id, name) {
     console.log('Selected category:', id, name);
-    // You can add category selection logic here
     
     if (currentUser) {
         alert(`Selected: ${name}\nFeature coming soon!`);
@@ -1090,7 +1089,6 @@ function selectCategory(id, name) {
 function openChatbot() {
     if (currentUser) {
         alert('🤖 Chatbot opening soon!\nUser: ' + currentUser.email);
-        // Here you can integrate your chatbot
     } else {
         alert('Please sign in to use the chatbot');
         openAuthModal();
@@ -1108,7 +1106,13 @@ async function initializeApp() {
         
         // Set up event listeners
         document.getElementById('authForm').addEventListener('submit', handleAuth);
-        document.getElementById('authButton').addEventListener('click', user ? handleSignOut : openAuthModal);
+        document.getElementById('authButton').addEventListener('click', function() {
+            if (currentUser) {
+                handleSignOut();
+            } else {
+                openAuthModal();
+            }
+        });
         document.getElementById('testChatButton').addEventListener('click', testDatabaseConnection);
         
         // Listen for auth state changes
