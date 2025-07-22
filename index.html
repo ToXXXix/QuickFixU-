@@ -858,7 +858,6 @@
                 <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
             </div>
 
-            <div id="errorMessage" class
 <div id="errorMessage" class="error-message"></div>
 <div id="successMessage" class="success-message"></div>
 
@@ -872,12 +871,15 @@
     <button type="submit" id="authSubmitBtn" class="form-button">Sign In</button>
 </form>
 
+        </div>
+  </div>
+
 <script>
 console.log('🚀 QuickFixU Starting...');
 
 // 🔧 SUPABASE CONFIGURATION - REPLACE WITH YOUR ACTUAL VALUES
 const SUPABASE_URL = 'https://ceanatdeztoouocesymwf.supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR_COMPLETE_ANON_KEY_HERE'; // You need to get the complete key from Supabase
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlYW5hdGRlenRvdW9jZXN5bXdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxODk4NjQsImV4cCI6MjA2ODc2NTg2NH0.M8VZnXMTD9ykdtCzHCq-5BWiWRaHlHLz1I7Hk2Iccrw'; // You need to get the complete key from Supabase
 
 // Initialize Supabase
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
