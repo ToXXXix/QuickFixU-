@@ -1042,26 +1042,36 @@ async function handleAuth(event) {
                 closeAuthModal();
             }, 1500);
         } else {
-            // Signup flow: create user and profile in DB
+            // --- NEW SIGNUP LOGIC STARTS HERE ---
             const { data, error } = await signUp(email, password);
             if (error) throw error;
 
-            // Insert into user_profiles
-            if (data.user) {
-                const { error: profileError } = await supabase
-                  .from('user_profiles')
-                  .insert([{
-                    id: data.user.id,
-                    email: data.user.email,
-                  }]);
-                if (profileError) throw profileError;
-                updateUserInterface(data.user);
-            }
+            // Supabase v2: .user or .session?.user or null
+            const user = (data && (data.user || (data.session && data.session.user))) || null;
 
-            showSuccess('Account created successfully!');
-            setTimeout(() => {
-                closeAuthModal();
-            }, 2000);
+            if (user) {
+                // Insert minimal profile (optional)
+                const { error: profileError } = await supabase
+                    .from('user_profiles')
+                    .insert([{
+                        id: user.id,
+                        email: user.email,
+                    }]);
+                if (profileError) throw profileError;
+
+                updateUserInterface(user);
+                showSuccess('Account created successfully!');
+                setTimeout(() => {
+                    closeAuthModal();
+                }, 2000);
+            } else {
+                // If no user returned, prompt user to check email (if email confirm is required)
+                showSuccess('Registration complete! Please check your email to confirm your account, then sign in.');
+                setTimeout(() => {
+                    switchTab('signin');
+                }, 2500);
+            }
+            // --- END SIGNUP LOGIC ---
         }
     } catch (error) {
         console.error('Auth error:', error);
@@ -1071,7 +1081,6 @@ async function handleAuth(event) {
         submitBtn.textContent = currentTab === 'signin' ? 'Sign In' : 'Sign Up';
     }
 }
-
 
 async function handleSignOut() {
     try {
