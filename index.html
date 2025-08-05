@@ -660,12 +660,15 @@
         <p id="chatbot-signin-message" style="display:none; color: #d32f2f;">
             🔐 Please sign in to use the AI chatbot.
         </p>
-        <iframe
-            src="https://www.chatbase.co/chatbot-iframe/OSLPiidIFDjaHnaBqIz7d"
-            width="100%"
-            style="height: 100%; min-height: 700px"
-            frameborder="0"
-        ></iframe>
+<div id="chatbot-iframe-wrapper" style="display: none;">
+    <iframe
+        id="chatbase-iframe"
+        src="https://www.chatbase.co/chatbot-iframe/OSLPiidIFDjaHnaBqIz7d"
+        width="100%"
+        style="height: 100%; min-height: 700px"
+        frameborder="0"
+    ></iframe>
+</div>
     </div>
 </section>
 
@@ -994,25 +997,23 @@ function updateChatbotVisibility(user) {
 function updateUserInterface(user) {
     const authButton = document.getElementById('authButton');
     const userEmail = document.getElementById('userEmail');
-    const chatbotStatus = document.getElementById('chatbotStatus');
-updateChatbotVisibility(user);
-    
+    const chatbotIframeWrapper = document.getElementById('chatbot-iframe-wrapper');
+    updateChatbotVisibility(user);
+
     if (user) {
         // User is signed in
         currentUser = user;
-        
-        // Show first 5 letters of email instead of "Sign Out"
         const emailPrefix = user.email.substring(0, 5);
         authButton.textContent = emailPrefix + '...';
         authButton.className = 'logout-button';
         authButton.onclick = handleSignOut;
-        
+
         userEmail.textContent = user.email;
         userEmail.style.display = 'inline';
-        
-        chatbotStatus.innerHTML = '✅ Signed in as ' + user.email + ' - Ready to chat!';
-    
-        
+
+        // Show the chatbot iframe section
+        if (chatbotIframeWrapper) chatbotIframeWrapper.style.display = "block";
+
         console.log('✅ User signed in:', user.email);
     } else {
         // User is signed out
@@ -1020,14 +1021,16 @@ updateChatbotVisibility(user);
         authButton.textContent = 'Sign In';
         authButton.className = 'login-button';
         authButton.onclick = openAuthModal;
-        
+
         userEmail.style.display = 'none';
-        
-        chatbotStatus.innerHTML = '🔐 Please sign in to start chatting with our AI assistant';
+
+        // Hide the chatbot iframe section
+        if (chatbotIframeWrapper) chatbotIframeWrapper.style.display = "none";
 
         console.log('❌ User signed out');
     }
 }
+
 
 // 🎯 EVENT HANDLERS
 async function handleAuth(event) {
@@ -1106,14 +1109,6 @@ async function handleSignOut() {
     }
 }
 
-function testDatabaseConnection() {
-    if (currentUser) {
-        alert('🎉 Database connected! User: ' + currentUser.email);
-        console.log('Database test - Current user:', currentUser);
-    } else {
-        alert('❌ Please sign in first');
-    }
-}
 
 // 📱 UTILITY FUNCTIONS
 function selectCategory(id, name) {
