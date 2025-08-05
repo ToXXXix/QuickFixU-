@@ -653,27 +653,15 @@
             </div>
         </section>
 
-        <section class="chatbot-section" id="chatbot">
-            <h2>🤖 AI Home Helper</h2>
-            <p>Get instant solutions to any household problem - just describe what's wrong!</p>
-            
-            <div class="chatbot-placeholder">
-                <div class="chatbot-icon">🛠️</div>
-                <h3>AI Assistant Integration Area</h3>
-                <p><strong>Ready to connect with AI!</strong></p>
-                <p id="chatbotStatus">🔐 Please sign in to start chatting with our AI assistant</p>
-                <div style="text-align: left; max-width: 600px; margin: 1rem auto; background: rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 10px;">
-                    <p>💧 "My toilet won't stop running"</p>
-                    <p>🚗 "My car won't start in the morning"</p>
-                    <p>💻 "My WiFi keeps disconnecting"</p>
-                    <p>🧽 "How do I remove this stain?"</p>
-                    <p>🔧 "My kitchen sink is clogged"</p>
-                </div>
-                <button id="testChatButton" class="form-button" style="max-width: 300px; margin: 20px auto; display: block;">
-                    🧪 Test Database Connection
-                </button>
-            </div>
-        </section>
+<section class="chatbot-section" id="chatbot">
+    <h2>🤖 AI Home Helper</h2>
+    <p>Get instant solutions to any household problem - just describe what's wrong!</p>
+    <div id="chatbot-area">
+        <p id="chatbot-signin-message" style="display:none; color: #d32f2f;">
+            🔐 Please sign in to use the AI chatbot.
+        </p>
+    </div>
+</section>
 
         <section class="problem-categories" id="problems">
             <div class="category-card" onclick="selectCategory(1, 'Plumbing Problems')">
@@ -979,11 +967,30 @@ function closeAuthModal() {
     hideMessages();
 }
 
+function updateChatbotVisibility(user) {
+    const signInMsg = document.getElementById('chatbot-signin-message');
+    // Chatbase is a floating widget, so no need to inject a div for it!
+    if (user) {
+        signInMsg.style.display = 'none';
+        // Open Chatbase widget if possible
+        if (window.chatbase) {
+            window.chatbase("open");
+        }
+    } else {
+        signInMsg.style.display = 'block';
+        // Close Chatbase widget if possible
+        if (window.chatbase) {
+            window.chatbase("close");
+        }
+    }
+}
+
 function updateUserInterface(user) {
     const authButton = document.getElementById('authButton');
     const userEmail = document.getElementById('userEmail');
     const chatbotStatus = document.getElementById('chatbotStatus');
     const testButton = document.getElementById('testChatButton');
+updateChatbotVisibility(user);
     
     if (user) {
         // User is signed in
@@ -1118,7 +1125,7 @@ function selectCategory(id, name) {
 
 function openChatbot() {
     if (currentUser) {
-        alert('🤖 Chatbot opening soon!\nUser: ' + currentUser.email);
+        if (window.chatbase) window.chatbase("open");
     } else {
         alert('Please sign in to use the chatbot');
         openAuthModal();
@@ -1141,9 +1148,6 @@ async function initializeApp() {
                 handleSignOut();
             } else {
                 openAuthModal();
-
-
-here are myu cpodes dont  change any fucking things which fucks up the codes just remove thing which shows in the webioste that there is no chatbot and i have already send u script of the chatbot add it to speicfic place where it needs to be and give me completed codes so i  paste them back to my wrbiste and all is working also edit the codes make everything work like my sign in is working so whren someone comes to the webistes signs in that he can use the chatbot that codes are already therte and just modify things according to u just do it please and thnaks
             }
         });
         document.getElementById('testChatButton').addEventListener('click', testDatabaseConnection);
