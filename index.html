@@ -988,41 +988,25 @@ function updateChatbotVisibility(user) {
 function updateUserInterface(user) {
     const authButton = document.getElementById('authButton');
     const userEmail = document.getElementById('userEmail');
-    const chatbotStatus = document.getElementById('chatbotStatus');
-    const testButton = document.getElementById('testChatButton');
 updateChatbotVisibility(user);
-    
-    if (user) {
-        // User is signed in
-        currentUser = user;
-        
-        // Show first 5 letters of email instead of "Sign Out"
-        const emailPrefix = user.email.substring(0, 5);
-        authButton.textContent = emailPrefix + '...';
-        authButton.className = 'logout-button';
-        authButton.onclick = handleSignOut;
-        
-        userEmail.textContent = user.email;
-        userEmail.style.display = 'inline';
-        
-        chatbotStatus.innerHTML = '✅ Signed in as ' + user.email + ' - Ready to chat!';
-        testButton.style.display = 'block';
-        
-        console.log('✅ User signed in:', user.email);
-    } else {
-        // User is signed out
-        currentUser = null;
-        authButton.textContent = 'Sign In';
-        authButton.className = 'login-button';
-        authButton.onclick = openAuthModal;
-        
-        userEmail.style.display = 'none';
-        
-        chatbotStatus.innerHTML = '🔐 Please sign in to start chatting with our AI assistant';
-        testButton.style.display = 'none';
-        
-        console.log('❌ User signed out');
-    }
+
+if (user) {
+    currentUser = user;
+    const emailPrefix = user.email.substring(0, 5);
+    authButton.textContent = emailPrefix + '...';
+    authButton.className = 'logout-button';
+    authButton.onclick = handleSignOut;
+    userEmail.textContent = user.email;
+    userEmail.style.display = 'inline';
+    console.log('✅ User signed in:', user.email);
+} else {
+    currentUser = null;
+    authButton.textContent = 'Sign In';
+    authButton.className = 'login-button';
+    authButton.onclick = openAuthModal;
+    userEmail.style.display = 'none';
+    console.log('❌ User signed out');
+}
 }
 
 // 🎯 EVENT HANDLERS
@@ -1102,14 +1086,6 @@ async function handleSignOut() {
     }
 }
 
-function testDatabaseConnection() {
-    if (currentUser) {
-        alert('🎉 Database connected! User: ' + currentUser.email);
-        console.log('Database test - Current user:', currentUser);
-    } else {
-        alert('❌ Please sign in first');
-    }
-}
 
 // 📱 UTILITY FUNCTIONS
 function selectCategory(id, name) {
