@@ -1055,6 +1055,7 @@ async function handleAuth(event) {
     showSuccess('Signed in successfully!');
    setTimeout(async () => {
     closeAuthModal();
+document.getElementById('chatbase-iframe').src = "https://www.chatbase.co/chatbot-iframe/OSLPiidIFDjaHnaBqIz7d?ts=" + Date.now();
     // Fetch latest user and update UI
     const user = await getCurrentUser();
     updateUserInterface(user);
@@ -1106,6 +1107,7 @@ async function handleSignOut() {
         await signOut();
         showSuccess('Signed out successfully!');
      setTimeout(() => {
+document.getElementById('chatbase-iframe').src = "about:blank";
     resetChatbotForUser(null); // <-- Add this line to reset chatbot iframe
     window.location.reload();
 }, 1000);
