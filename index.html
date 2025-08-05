@@ -1049,12 +1049,15 @@ async function handleAuth(event) {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Processing...';
 
-        if (currentTab === 'signin') {
-            const data = await signIn(email, password);
-            showSuccess('Signed in successfully!');
-            setTimeout(() => {
-                closeAuthModal();
-            }, 1500);
+ if (currentTab === 'signin') {
+    const data = await signIn(email, password);
+    showSuccess('Signed in successfully!');
+    setTimeout(async () => {
+        closeAuthModal();
+        // Fetch latest user and update UI
+        const user = await getCurrentUser();
+        updateUserInterface(user);
+    }, 1500);
         } else {
             // --- NEW SIGNUP LOGIC STARTS HERE ---
             const { data, error } = await signUp(email, password);
