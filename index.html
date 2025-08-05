@@ -995,7 +995,6 @@ function updateUserInterface(user) {
     const authButton = document.getElementById('authButton');
     const userEmail = document.getElementById('userEmail');
     const chatbotStatus = document.getElementById('chatbotStatus');
-    const testButton = document.getElementById('testChatButton');
 updateChatbotVisibility(user);
     
     if (user) {
@@ -1012,7 +1011,7 @@ updateChatbotVisibility(user);
         userEmail.style.display = 'inline';
         
         chatbotStatus.innerHTML = '✅ Signed in as ' + user.email + ' - Ready to chat!';
-        testButton.style.display = 'block';
+    
         
         console.log('✅ User signed in:', user.email);
     } else {
@@ -1025,8 +1024,7 @@ updateChatbotVisibility(user);
         userEmail.style.display = 'none';
         
         chatbotStatus.innerHTML = '🔐 Please sign in to start chatting with our AI assistant';
-        testButton.style.display = 'none';
-        
+
         console.log('❌ User signed out');
     }
 }
