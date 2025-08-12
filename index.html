@@ -845,15 +845,6 @@
             <div class="solver-options" id="solverOptions">
                 <!-- Options populated by JS -->
             </div>
-            <div class="solver-result" id="solverResult" style="display: none;">
-                <div class="result-icon">🛠️</div>
-                <h3 id="resultTitle">Solution Found!</h3>
-                <p id="resultDescription">Based on your answers...</p>
-                <div class="result-actions">
-                    <button onclick="openChatbotWithContext()" class="cta-button">Chat with AI</button>
-                    <button onclick="restartSolver()" class="cta-button secondary">Try Another</button>
-                </div>
-            </div>
         </div>
     </div>
 </section>
@@ -1394,12 +1385,48 @@ function selectCategory(id, name) {
 }
 
 function openChatbot() {
-    if (currentUser) {
-        if (window.chatbase) window.chatbase("open");
-    } else {
-        alert('Please sign in to use the chatbot');
-        openAuthModal();
-    }
+  // If not signed in, show auth
+  if (!currentUser) {
+    openAuthModal();
+    return;
+  }
+
+  // Ensure iframe is visible
+  const chatbotSection = document.getElementById('chatbot');
+  const iframe = document.getElementById('chatbase-iframe');
+
+  // Smooth scroll to chatbot section
+  if (chatbotSection) chatbotSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Open floating widget if present
+  if (window.chatbase) window.chatbase("open");
+
+  // Focus the iframe so user can start typing
+  if (iframe) iframe.focus();
+}
+
+function openChatbotWithContext(contextText = '') {
+  if (!currentUser) {
+    openAuthModal();
+    return;
+  }
+
+  const chatbotSection = document.getElementById('chatbot');
+  const iframe = document.getElementById('chatbase-iframe');
+
+  // Build a fresh URL for the iframe with optional context + userId
+  const base = 'https://www.chatbase.co/chatbot-iframe/OSLPiidIFDjaHnaBqIz7d';
+  const u = new URL(base);
+  if (currentUser?.id) u.searchParams.set('userId', currentUser.id);
+  if (contextText) u.searchParams.set('context', contextText);
+  u.searchParams.set('r', Math.random());
+
+  if (iframe) iframe.src = u.toString();
+
+  // Scroll and open widget
+  if (chatbotSection) chatbotSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (window.chatbase) window.chatbase("open");
+  if (iframe) iframe.focus();
 }
 
 // 🚀 INITIALIZATION
@@ -1515,10 +1542,18 @@ function solverSelectCategory(category) {
 }
 
 function showSolution(problem) {
-    document.getElementById('solverResult').style.display = 'block';
-    document.getElementById('resultTitle').textContent = `${problem} Solution`;
-    document.getElementById('resultDescription').textContent = solutions[problem] || "Let our AI help you with detailed steps!";
+  document.getElementById('solverResult').style.display = 'block';
+  document.getElementById('resultTitle').textContent = `${problem} Solution`;
+  document.getElementById('resultDescription').textContent =
+    solutions[problem] || "Let our AI help you with detailed steps!";
+
+  // Wire the Chat button to pass context
+  const chatBtn = document.getElementById('solverChatBtn');
+  if (chatBtn) {
+    chatBtn.onclick = () => openChatbotWithContext(`Help me with: ${problem}`);
+  }
 }
+
 
 function restartSolver() {
     document.getElementById('solverResult').style.display = 'none';
@@ -1560,15 +1595,7 @@ function calculateCosts() {
     document.getElementById('costComparison').style.display = 'grid';
     document.getElementById('savingsDisplay').style.display = 'block';
 }
-
-function openChatbotWithContext() {
-    if (currentUser) {
-        alert('Opening AI assistant with your problem details!');
-    } else {
-        openAuthModal();
-    }
-}
-
+\
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     initProblemSolver();
