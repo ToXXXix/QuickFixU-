@@ -595,6 +595,77 @@
         }
 
         @media (max-width: 768px) {
+
+.problem-solver-section {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 4rem 0;
+            padding: 3rem 0;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .problem-solver-section h2 {
+            color: white;
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .solver-widget {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #333;
+        }
+
+        .solver-question {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: #2193b0;
+        }
+
+        .solver-options {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .solver-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .solver-option:hover {
+            border-color: #2193b0;
+            background: rgba(33, 147, 176, 0.1);
+        }
+
+        .solver-result {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .result-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
             .nav-links {
                 gap: 1rem;
             }
@@ -621,6 +692,67 @@
                 gap: 0.5rem;
             }
         }
+.cost-calculator-section {
+    background: rgba(255, 255, 255, 0.1);
+    margin: 4rem 0;
+    padding: 3rem 0;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.calculator-widget {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.problem-select {
+    margin-bottom: 2rem;
+}
+
+.problem-select select {
+    padding: 10px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    width: 200px;
+}
+
+.cost-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.cost-option {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.cost-amount {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2193b0;
+    margin: 1rem 0;
+}
+
+.savings-display {
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-top: 1.5rem;
+}
+
+.savings-amount {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
     </style>
 </head>
 <body>
@@ -652,6 +784,69 @@
                 <a href="#problems" class="cta-button secondary">Browse Problems</a>
             </div>
         </section>
+
+<!-- Interactive Problem Solver -->
+<section class="problem-solver-section" id="problem-solver">
+    <div class="container">
+        <h2>🔍 Quick Problem Solver</h2>
+        <p>Answer a few questions to get instant guidance</p>
+        <div class="solver-widget" id="solverWidget">
+            <div class="solver-question" id="solverQuestion">
+                What type of problem are you experiencing?
+            </div>
+            <div class="solver-options" id="solverOptions">
+                <!-- Options populated by JS -->
+            </div>
+            <div class="solver-result" id="solverResult" style="display: none;">
+                <div class="result-icon">🛠️</div>
+                <h3 id="resultTitle">Solution Found!</h3>
+                <p id="resultDescription">Based on your answers...</p>
+                <div class="result-actions">
+                    <button onclick="openChatbotWithContext()" class="cta-button">Chat with AI</button>
+                    <button onclick="restartSolver()" class="cta-button secondary">Try Another</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Cost Calculator -->
+<section class="cost-calculator-section" id="cost-calculator">
+    <div class="container">
+        <h2>💰 Cost Calculator</h2>
+        <p>See how much you can save with DIY repairs!</p>
+        <div class="calculator-widget">
+            <div class="problem-select">
+                <label for="problemSelect">Select a problem:</label>
+                <select id="problemSelect" onchange="calculateCosts()">
+                    <option value="">Choose a repair...</option>
+                    <option value="drain">Clogged Drain</option>
+                    <option value="faucet">Leaky Faucet</option>
+                    <option value="toilet">Toilet Issues</option>
+                    <option value="outlet">Dead Outlet</option>
+                </select>
+            </div>
+            
+            <div class="cost-comparison" id="costComparison" style="display: none;">
+                <div class="cost-option diy-option">
+                    <h3>🛠️ DIY Cost</h3>
+                    <div class="cost-amount" id="diyCost">$0</div>
+                    <div class="cost-breakdown" id="diyBreakdown"></div>
+                </div>
+                <div class="cost-option pro-option">
+                    <h3>👨‍🔧 Professional Cost</h3>
+                    <div class="cost-amount" id="proCost">$0</div>
+                    <div class="cost-breakdown" id="proBreakdown"></div>
+                </div>
+            </div>
+            
+            <div class="savings-display" id="savingsDisplay" style="display: none;">
+                <div class="savings-amount">Save $<span id="savingsAmount">0</span>!</div>
+                <div class="savings-equivalent">That's <span id="savingsEquiv">1 pizza</span>! 🍕</div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <section class="chatbot-section" id="chatbot">
     <h2>🤖 QuickFix AI</h2>
