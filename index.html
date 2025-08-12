@@ -1397,4 +1397,104 @@ function resetChatbotForUser(user) {
             : "about:blank";
     }
 }
+
+// Problem Solver Functions
+const solverQuestions = {
+    plumbing: ["Clogged Drain", "Leaky Faucet", "Toilet Issues", "Low Water Pressure"],
+    electrical: ["Dead Outlet", "Light Not Working", "Circuit Breaker Tripped"],
+    appliance: ["Refrigerator Issues", "Washer Problems", "Dishwasher Not Working"]
+};
+
+const solutions = {
+    "Clogged Drain": "Try hot water + dish soap first, then plunger, then baking soda + vinegar.",
+    "Leaky Faucet": "Usually a worn washer or O-ring. Turn off water, disassemble, replace parts.",
+    "Dead Outlet": "Check circuit breaker first. If that's fine, test with different device."
+};
+
+function initProblemSolver() {
+    const options = document.getElementById('solverOptions');
+    options.innerHTML = `
+        <div class="solver-option" onclick="selectCategory('plumbing')">
+            <span style="font-size: 2rem;">🔧</span>
+            <span>Plumbing Issues</span>
+        </div>
+        <div class="solver-option" onclick="selectCategory('electrical')">
+            <span style="font-size: 2rem;">⚡</span>
+            <span>Electrical Problems</span>
+        </div>
+        <div class="solver-option" onclick="selectCategory('appliance')">
+            <span style="font-size: 2rem;">🏠</span>
+            <span>Appliance Issues</span>
+        </div>
+    `;
+}
+
+function selectCategory(category) {
+    const question = document.getElementById('solverQuestion');
+    const options = document.getElementById('solverOptions');
+    
+    question.textContent = `What specific ${category} problem?`;
+    options.innerHTML = '';
+    
+    solverQuestions[category].forEach(problem => {
+        const div = document.createElement('div');
+        div.className = 'solver-option';
+        div.innerHTML = `<span>${problem}</span>`;
+        div.onclick = () => showSolution(problem);
+        options.appendChild(div);
+    });
+}
+
+function showSolution(problem) {
+    document.getElementById('solverResult').style.display = 'block';
+    document.getElementById('resultTitle').textContent = `${problem} Solution`;
+    document.getElementById('resultDescription').textContent = solutions[problem] || "Let our AI help you with detailed steps!";
+}
+
+function restartSolver() {
+    document.getElementById('solverResult').style.display = 'none';
+    initProblemSolver();
+}
+
+// Cost Calculator Functions
+const repairCosts = {
+    drain: { diy: 5, pro: 150, tools: "Plunger, baking soda" },
+    faucet: { diy: 8, pro: 200, tools: "Wrench, washers" },
+    toilet: { diy: 12, pro: 180, tools: "Toilet parts kit" },
+    outlet: { diy: 15, pro: 120, tools: "Outlet tester, outlet" }
+};
+
+function calculateCosts() {
+    const problem = document.getElementById('problemSelect').value;
+    if (!problem) return;
+    
+    const costs = repairCosts[problem];
+    const savings = costs.pro - costs.diy;
+    
+    document.getElementById('diyCost').textContent = `$${costs.diy}`;
+    document.getElementById('proCost').textContent = `$${costs.pro}`;
+    document.getElementById('savingsAmount').textContent = savings;
+    
+    // Show equivalent
+    let equiv = "1 pizza";
+    if (savings > 100) equiv = "3 pizzas";
+    if (savings > 150) equiv = "a week of groceries";
+    document.getElementById('savingsEquiv').textContent = equiv;
+    
+    document.getElementById('costComparison').style.display = 'grid';
+    document.getElementById('savingsDisplay').style.display = 'block';
+}
+
+function openChatbotWithContext() {
+    if (currentUser) {
+        alert('Opening AI assistant with your problem details!');
+    } else {
+        openAuthModal();
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    initProblemSolver();
+});
 </script>
