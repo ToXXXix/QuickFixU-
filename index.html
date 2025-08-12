@@ -431,8 +431,6 @@
     }
 }
 
-// Use it like: showNotification('Welcome to QuickFix!', 'success');
-
         footer {
             background: rgba(0, 0, 0, 0.3);
             color: white;
@@ -758,6 +756,49 @@
     min-width: 120px;
     font-weight: 600;
 }
+
+.calculator-widget,
+.solver-widget {
+  background: rgba(255,255,255,0.9);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+
+.solver-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; margin: 10px 0;
+  border: 2px solid rgba(33,147,176,0.15);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+  box-shadow: 0 6px 14px rgba(33,147,176,0.08);
+}
+
+.solver-option:hover {
+  transform: translateY(-2px);
+  border-color: #2193b0;
+  box-shadow: 0 10px 22px rgba(33,147,176,0.18);
+}
+
+.problem-select select {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 2px solid #dbe8ef;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.06) inset;
+}
+
+.cost-option {
+  border: 1px solid #e6f2f6;
+  background: linear-gradient(180deg, #ffffff 0%, #f4fbff 100%);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.cost-option:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(0,0,0,0.12);
+}
+
+.cost-amount { letter-spacing: 0.5px; }
+
     </style>
 </head>
 <body>
@@ -1426,6 +1467,7 @@ function resetChatbotForUser(user) {
 }
 
 // Problem Solver Functions
+// Problem Solver Functions
 const solverQuestions = {
     plumbing: ["Clogged Drain", "Leaky Faucet", "Toilet Issues", "Low Water Pressure"],
     electrical: ["Dead Outlet", "Light Not Working", "Circuit Breaker Tripped"],
@@ -1441,22 +1483,22 @@ const solutions = {
 function initProblemSolver() {
     const options = document.getElementById('solverOptions');
     options.innerHTML = `
-        <div class="solver-option" onclick="selectCategory('plumbing')">
+        <div class="solver-option" onclick="solverSelectCategory('plumbing')">
             <span style="font-size: 2rem;">🔧</span>
             <span>Plumbing Issues</span>
         </div>
-        <div class="solver-option" onclick="selectCategory('electrical')">
+        <div class="solver-option" onclick="solverSelectCategory('electrical')">
             <span style="font-size: 2rem;">⚡</span>
             <span>Electrical Problems</span>
         </div>
-        <div class="solver-option" onclick="selectCategory('appliance')">
+        <div class="solver-option" onclick="solverSelectCategory('appliance')">
             <span style="font-size: 2rem;">🏠</span>
             <span>Appliance Issues</span>
         </div>
     `;
 }
 
-function selectCategory(category) {
+function solverSelectCategory(category) {
     const question = document.getElementById('solverQuestion');
     const options = document.getElementById('solverOptions');
     
@@ -1482,6 +1524,7 @@ function restartSolver() {
     document.getElementById('solverResult').style.display = 'none';
     initProblemSolver();
 }
+
 
 // Cost Calculator Functions
 const repairCosts = {
