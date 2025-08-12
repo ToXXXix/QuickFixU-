@@ -403,6 +403,54 @@
         .floating-chat-button::before {
             content: '🛠️';
         }
+.notification-container {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    z-index: 10000;
+}
+
+.notification {
+    background: rgba(33, 147, 176, 0.95);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    animation: slideInRight 0.5s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    max-width: 300px;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+function showNotification(message, type = 'info') {
+    const container = document.getElementById('notificationContainer');
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    
+    if (type === 'success') {
+        notification.style.background = 'rgba(76, 175, 80, 0.95)';
+    } else if (type === 'error') {
+        notification.style.background = 'rgba(244, 67, 54, 0.95)';
+    }
+    
+    container.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 4000);
+}
+
+// Use it like: showNotification('Welcome to QuickFix!', 'success');
 
         footer {
             background: rgba(0, 0, 0, 0.3);
